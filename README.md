@@ -23,7 +23,7 @@ To work on this project locally, follow these steps:
 
 ```sh
 # Step 1: Clone the repository
-git clone <YOUR_GIT_URL>
+git clone https://github.com/NvkAnirudh/determined-admin.git
 
 # Step 2: Navigate to the project directory
 cd determined-admin
