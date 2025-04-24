@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -22,6 +21,7 @@ import {
 } from "@/components/ui/select"
 import TagInput from "@/components/ui/tag-input"
 import { useToast } from "@/components/ui/use-toast"
+import { createDEPrepQuestion } from "@/utils/queries";
 
 const formSchema = z.object({
   question: z.string().min(10, "Question must be at least 10 characters"),
@@ -53,15 +53,24 @@ const DEPrepForm = () => {
     },
   })
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values)
-    toast({
-      title: "Success",
-      description: "DE Prep question has been submitted",
-    })
-    form.reset()
-    setTags([])
-  }
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      await createDEPrepQuestion(values);
+      toast({
+        title: "Success",
+        description: "DE Prep question has been submitted",
+      });
+      form.reset();
+      setTags([]);
+    } catch (error) {
+      console.error('Error submitting DE Prep question:', error);
+      toast({
+        title: "Error",
+        description: "Failed to submit DE Prep question",
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <Form {...form}>

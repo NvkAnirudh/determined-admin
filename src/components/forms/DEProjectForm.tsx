@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -16,6 +15,7 @@ import {
 } from "@/components/ui/form"
 import TagInput from "@/components/ui/tag-input"
 import { useToast } from "@/components/ui/use-toast"
+import { createDEProject } from "@/utils/queries";
 
 const formSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters"),
@@ -38,15 +38,24 @@ const DEProjectForm = () => {
     },
   })
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values)
-    toast({
-      title: "Success",
-      description: "DE Project has been submitted",
-    })
-    form.reset()
-    setTags([])
-  }
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      await createDEProject(values);
+      toast({
+        title: "Success",
+        description: "DE Project has been submitted",
+      });
+      form.reset();
+      setTags([]);
+    } catch (error) {
+      console.error('Error submitting DE Project:', error);
+      toast({
+        title: "Error",
+        description: "Failed to submit DE Project",
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <Form {...form}>
