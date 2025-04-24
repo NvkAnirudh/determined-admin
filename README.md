@@ -64,4 +64,4 @@ To contribute to this project:
 
 ## License
 
-[Specify your license information here]
+[MIT](https://github.com/NvkAnirudh/determined-admin/blob/main/LICENSE)
