@@ -1,3 +1,4 @@
+
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -55,7 +56,15 @@ const DEPrepForm = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await createDEPrepQuestion(values);
+      // Since we're using Zod validation, we can safely assert that all required fields are present
+      // The type assertion makes TypeScript treat the values as non-optional
+      await createDEPrepQuestion({
+        question: values.question,
+        category: values.category,
+        tags: values.tags,
+        substackLink: values.substackLink,
+      });
+
       toast({
         title: "Success",
         description: "DE Prep question has been submitted",

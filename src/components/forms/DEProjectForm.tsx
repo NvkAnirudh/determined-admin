@@ -1,3 +1,4 @@
+
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -40,7 +41,14 @@ const DEProjectForm = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await createDEProject(values);
+      // Explicitly pass each field to satisfy TypeScript's type checking
+      await createDEProject({
+        title: values.title,
+        description: values.description,
+        tags: values.tags,
+        substackLink: values.substackLink,
+      });
+      
       toast({
         title: "Success",
         description: "DE Project has been submitted",
