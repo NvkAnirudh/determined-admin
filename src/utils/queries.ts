@@ -6,11 +6,13 @@ export async function createDEPrepQuestion({
   category,
   tags,
   substackLink,
+  difficulty,
 }: {
   question: string;
   category: string;
   tags: string[];
   substackLink: string;
+  difficulty: string;
 }) {
   // First, get or create the category
   const { data: categoryData, error: categoryError } = await supabase
@@ -40,6 +42,7 @@ export async function createDEPrepQuestion({
       question,
       category_id: categoryId,
       substack_link: substackLink,
+      difficulty,
     })
     .select()
     .single();

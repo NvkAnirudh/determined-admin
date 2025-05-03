@@ -29,6 +29,7 @@ const formSchema = z.object({
   category: z.string().min(1, "Please select a category"),
   tags: z.array(z.string()).min(1, "At least one tag is required"),
   substackLink: z.string().url("Please enter a valid URL"),
+  difficulty: z.string().min(1, "Please select a difficulty level"),
 })
 
 const categories = [
@@ -38,6 +39,13 @@ const categories = [
   "SQL",
   "Distributed Systems",
   "Big Data",
+]
+
+const difficultyLevels = [
+  "Easy",
+  "Medium",
+  "Hard",
+  "Expert",
 ]
 
 const DEPrepForm = () => {
@@ -51,18 +59,25 @@ const DEPrepForm = () => {
       category: "",
       tags: [],
       substackLink: "",
+      difficulty: "",
     },
   })
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      // Since we're using Zod validation, we can safely assert that all required fields are present
-      // The type assertion makes TypeScript treat the values as non-optional
+      // Extract values explicitly to satisfy TypeScript
+      const questionText = values.question;
+      const category = values.category;
+      const tagsList = values.tags;
+      const substackLink = values.substackLink;
+      const difficulty = values.difficulty;
+
       await createDEPrepQuestion({
-        question: values.question,
-        category: values.category,
-        tags: values.tags,
-        substackLink: values.substackLink,
+        question: questionText,
+        category: category,
+        tags: tagsList,
+        substackLink: substackLink,
+        difficulty: difficulty,
       });
 
       toast({
@@ -118,6 +133,31 @@ const DEPrepForm = () => {
                   {categories.map((category) => (
                     <SelectItem key={category} value={category}>
                       {category}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="difficulty"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Difficulty</FormLabel>
+              <Select onValueChange={field.onChange} value={field.value}>
+                <FormControl>
+                  <SelectTrigger className="bg-[#242424] border-[#333]">
+                    <SelectValue placeholder="Select difficulty level" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent className="bg-[#242424] border-[#333]">
+                  {difficultyLevels.map((level) => (
+                    <SelectItem key={level} value={level}>
+                      {level}
                     </SelectItem>
                   ))}
                 </SelectContent>

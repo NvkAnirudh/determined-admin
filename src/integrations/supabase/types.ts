@@ -121,6 +121,7 @@ export type Database = {
         Row: {
           category_id: string | null
           created_at: string | null
+          difficulty: string | null
           id: string
           question: string
           substack_link: string | null
@@ -129,6 +130,7 @@ export type Database = {
         Insert: {
           category_id?: string | null
           created_at?: string | null
+          difficulty?: string | null
           id?: string
           question: string
           substack_link?: string | null
@@ -137,6 +139,7 @@ export type Database = {
         Update: {
           category_id?: string | null
           created_at?: string | null
+          difficulty?: string | null
           id?: string
           question?: string
           substack_link?: string | null
@@ -170,13 +173,45 @@ export type Database = {
         }
         Relationships: []
       }
+      user_question_confidence: {
+        Row: {
+          id: string
+          question_id: string
+          score: number
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          question_id: string
+          score: number
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          id?: string
+          question_id?: string
+          score?: number
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_question_confidence_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "questions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
       promote_to_admin: {
-        Args: { user_id: string }
+        Args: Record<PropertyKey, never> | { user_id: string }
         Returns: undefined
       }
     }
