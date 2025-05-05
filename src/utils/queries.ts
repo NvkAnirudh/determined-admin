@@ -35,6 +35,9 @@ export async function createDEPrepQuestion({
     var categoryId = categoryData.id;
   }
 
+  // Convert difficulty to lowercase to match database expectations
+  const normalizedDifficulty = difficulty.toLowerCase();
+  
   // Insert the question
   const { data: questionData, error: questionError } = await supabase
     .from("questions")
@@ -42,12 +45,15 @@ export async function createDEPrepQuestion({
       question,
       category_id: categoryId,
       substack_link: substackLink,
-      difficulty,
+      difficulty: normalizedDifficulty,
     })
     .select()
     .single();
 
-  if (questionError) throw questionError;
+  if (questionError) {
+    console.error("Error inserting question:", questionError);
+    throw questionError;
+  }
 
   // Handle tags
   const tagPromises = tags.map(async (tagName) => {

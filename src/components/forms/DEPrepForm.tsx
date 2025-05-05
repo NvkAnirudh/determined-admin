@@ -41,11 +41,12 @@ const categories = [
   "Big Data",
 ]
 
+// Updated difficulty levels to match database expectations (lowercase)
 const difficultyLevels = [
-  "Easy",
-  "Medium",
-  "Hard",
-  "Expert",
+  "easy",
+  "medium",
+  "hard",
+  "expert",
 ]
 
 const DEPrepForm = () => {
@@ -157,7 +158,8 @@ const DEPrepForm = () => {
                 <SelectContent className="bg-[#242424] border-[#333]">
                   {difficultyLevels.map((level) => (
                     <SelectItem key={level} value={level}>
-                      {level}
+                      {/* Display with capitalized first letter for UI */}
+                      {level.charAt(0).toUpperCase() + level.slice(1)}
                     </SelectItem>
                   ))}
                 </SelectContent>
